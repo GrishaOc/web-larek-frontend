@@ -34,6 +34,8 @@ interface IformSuccessful{
     result:number;
 }
 interface IvalidOreder{
+    errormessage:string[];
+    error:boolean;
     phone: string;
 	email: string;
 	address: string;
