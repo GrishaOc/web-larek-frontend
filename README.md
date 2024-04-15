@@ -98,3 +98,18 @@ yarn build
 - `addToBasket(product: IproductCard): void` - добавление в корзину 
 - `removeFromBasket(product:IproductCard):void` - удаление из корзины
 - `getResultBasketPrice():number` - получение итоговой суммы 
+
+## Базовый код
+
+### Класс Api - класс содержащий базовую логику отправки запроса. В конструкторе передается базовый адрес сервера и опциональный обьтект с запросами
+
+### Конструктор class Api
+
+- constructor(baseUrl: string, options: RequestInit = {})
+
+#### Методы class Api
+
+- `get` - получение данных
+- `post` - отправка данных
+- `handleResponse` - обрабатывает ответ с сервера
+
