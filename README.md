@@ -43,12 +43,57 @@ yarn build
 ## Архитектура кода
 В проекте используется принцип MVP(Model-View-Presenter)
 MVP(Model-View-Presenter) - обеспечивает четкое разделение ответственностей между классами Model и View каждый класс выполняет свою определенную роль
-
-Model — между сервером и интерфейсом есть данные, в которых отражена вся ценность нашего приложения. Нередко он содержит значительную часть бизнес-логики.
-
-View — интерфейс для взаимодействия с пользователем. Его задача — выводить что-то на экран и генерировать события с действиями пользователя.
-
-Presenter - получает данные  извне и отправлять их за пределы браузера. В нашем проекте это EventEmitter
+<table>
+    <thead>
+        <tr>
+            <th>№</th>
+            <th>Компонент</th>
+            <th>Описание</th>
+            <th>Базовый класс</th>
+            <th>Связанный класс</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>1</td>
+            <td>Model</td>
+            <td>Модель данных</td>
+            <td>Model</td>
+            <td>
+                <ul>
+                    <li>AppState</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>View</td>
+            <td>Модель отображения</td>
+            <td>component</td>
+            <td>
+                <ul>
+                    <li>BasketandBasketItem</li>
+                    <li>card</li>
+                    <li>contactsForm</li>
+                    <li>form</li>
+                    <li>modal</li>
+                    <li>orderForm</li>
+                    <li>page</li>
+                    <li>success</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>Presenter</td>
+            <td>Модель связи</td>
+            <td>-</td>
+            <td>
+                Реализуется в файле index.ts
+            </td>
+        </tr>
+    </tbody>
+</table>
 ## Типы данных
 ### interface IproductCard - Интерфейс описывающий карточки товара 
 - `id: string` - идентификатор товара в магазине
