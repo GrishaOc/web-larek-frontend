@@ -1,47 +1,46 @@
-interface IproductCard{
+export interface IproductCard{
     id:string;
-    name:string;
+    title:string;
     price: number|null;
-    img:string;
+    image:string;
     category:string;
     description:string;
     added:boolean;
 }
-interface Ipage{
+export interface Ipage{
     counter:number;
     catalog:HTMLElement[];
+    locked: boolean;
 }
-interface Ibasket{
+export interface Ibasket{
     products:HTMLElement[];
     result:number;
 }
-interface IproductCardBasket extends IproductCard{
+export interface IproductCardBasket extends IproductCard{
     number:number;
 }
-interface IformDelivery{
+export interface IformDelivery{
     adress:string;
     methodPay:string;
 }
-interface IcontactDetails{
+export interface IcontactDetails{
     email:string;
     phone:string;
 }
-interface IorderSuccessful{
+export interface IorderSuccessful{
     id:string;
     result:number;
 }
-interface IformSuccessful{
+export interface IformSuccessful{
     result:number;
 }
-interface IvalidOreder{
-    errormessage:string[];
-    error:boolean;
+export interface IvalidOreder{
     phone: string;
 	email: string;
-	address: string;
+	adress: string;
 	methodPay: string;
 }
-interface IorderInfo{
+export interface IorderInfo{
     items:string[];
     methodPay:string;
     result:number;
@@ -49,7 +48,7 @@ interface IorderInfo{
     phone:string;
     email:string;
 }
-interface IstatusApp{
+export interface IstatusApp{
     catalog:IproductCard[];
     basket:IproductCard[];
     order:IorderInfo|null;
@@ -58,3 +57,7 @@ interface IstatusApp{
     removeFromBasket(product:IproductCard):void;
     getResultBasketPrice():number;
 }
+export interface IModal {
+	content: HTMLElement;
+}
+export type FormErrors = Partial<Record<keyof IorderInfo, string>>
