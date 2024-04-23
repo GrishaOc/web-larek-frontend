@@ -1,22 +1,21 @@
-import { component } from '../base/component';
+import { ICards } from '../../types';
 import { ensureElement } from '../../utils/utils';
-import { IproductCard } from '../../types';
+import { Component } from '../base/Component';
 
 interface ICardActions {
 	onClick: (event: MouseEvent) => void;
 }
-export class card extends component<IproductCard> {
-	private _category: HTMLElement;
-	private _title: HTMLElement;
-	private _image?: HTMLImageElement;
-	protected _description?: HTMLElement;
-	private _button?: HTMLButtonElement;
-	private _price?: HTMLElement;
 
-    categoryMapping: { [key: string]: string } = {
-		'софт-скил': 'card__category_soft',
-		другое: 'card__category_other',
-		'хард-скил': 'card__category_hard',
+export class Card extends Component<ICards> {
+	protected _image: HTMLImageElement;
+	protected _title: HTMLElement;
+	protected _category: HTMLElement;
+	protected _price: HTMLElement;
+	protected _description: HTMLElement;
+	protected _button?: HTMLButtonElement;
+
+	Category: { [key: string]: string } = {'софт-скил': 'card__category_soft',
+    другое: 'card__category_other','хард-скил': 'card__category_hard',
 		дополнительное: 'card__category_additional',
 		кнопка: 'card__category_button',
 	};
@@ -27,19 +26,18 @@ export class card extends component<IproductCard> {
 		actions?: ICardActions
 	) {
 		super(container);
-
-		this._category = ensureElement<HTMLElement>(
-			`.${blockName}__category`,
-			container
-		);
-		this._title = ensureElement<HTMLElement>(`.${blockName}__title`, container);
 		this._image = ensureElement<HTMLImageElement>(
 			`.${blockName}__image`,
 			container
 		);
-		this._button = container.querySelector(`.${blockName}__button`);
-		this._description = container.querySelector(`.${blockName}__text`);
+		this._title = ensureElement<HTMLElement>(`.${blockName}__title`, container);
+		this._category = ensureElement<HTMLElement>(
+			`.${blockName}__category`,
+			container
+		);
 		this._price = container.querySelector(`.${blockName}__price`);
+		this._description = container.querySelector(`.${blockName}__description`);
+		this._button = container.querySelector(`.${blockName}__button`);
 
 		if (actions?.onClick) {
 			if (this._button) {
@@ -49,29 +47,31 @@ export class card extends component<IproductCard> {
 			}
 		}
 	}
-
-	set category(value: string) {
-		this.setText(this._category, value);
-
-		this._category.className = '';
-		const mainClass = `${this.blockName}__category`;
-		const additionalClass = this.categoryMapping[value];
-		this._category.classList.add(mainClass, `${mainClass}_${additionalClass}`);
-	}
-
-	set name (value: string) {
-		this.setText(this._title, value);
+	set id(value: string) {
+		this.container.dataset.id = value;
 	}
 
 	set image(value: string) {
-		this.setIMG(this._image, value, this.name);
+		this.setImage(this._image, value, this.title);
 	}
 
-	set price(value: number |null) {
-		this.setText(this._price, value ? `${value.toString()} синапсов` : 'Бесценно');
+	set title(value: string) {
+		this.setText(this._title, value);
 	}
-    
-    get price(): number {
+
+	set category(value: string) {
+		this.setText(this._category, value);
+		this._category.classList.add(this.Category[value]);
+	}
+
+	set price(value: number | null) {
+		this.setText(
+			this._price,
+			value ? `${value.toString()} синапсов` : 'Бесценно'
+		);
+	}
+
+	get price(): number {
 		return Number(this._price.textContent) || 0;
 	}
 
@@ -92,20 +92,19 @@ export class card extends component<IproductCard> {
 
 	updateButton(selected: boolean) {
 		if (selected) {
-			this.button = 'Убрать из корзины';
+			this.button = 'убрать из корзины';
 		} else {
 			this.button = 'В корзину';
 		}
 	}
 }
 
-export class CardPreview extends card {
+export class ViewCard extends Card {
 	protected _description: HTMLElement;
 	constructor(container: HTMLElement, actions?: ICardActions) {
 		super('card', container, actions);
 		this._description = container.querySelector(`.${this.blockName}__text`);
 	}
-
 	set description(value: string) {
 		this.setText(this._description, value);
 	}
