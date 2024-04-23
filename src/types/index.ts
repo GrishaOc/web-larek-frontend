@@ -1,63 +1,70 @@
-export interface IproductCard{
+export interface ICards{
     id:string;
     title:string;
-    price: number|null;
     image:string;
-    category:string;
     description:string;
-    added:boolean;
+    selected:boolean;
+    category:string;
+    price:number|null;
 }
-export interface Ipage{
+
+export interface IOrder{
+    payment:string;
+    total:number;
+    address:string;
+    phone:string;
+    email:string;
+    items:string[];
+}
+
+export interface IDeliveryForm{
+    payment:string;
+    address:string;
+}
+
+export interface IContacntForm{
+    email:string;
+    phone:string;
+}
+
+export interface IStatusApi{
+    items:ICards[]
+}
+export interface IPage{
     counter:number;
     catalog:HTMLElement[];
-    locked: boolean;
+    locked:boolean;
 }
-export interface Ibasket{
-    products:HTMLElement[];
-    result:number;
+export interface IStatusApi{
+    catalog:ICards[];
+    order:IOrder|null;
+    basket:ICards[];
+    setCatalog(items: ICards[]): void;
+	addToBasket(product:ICards): void;
+	removeBasket(product: ICards): void;
+	getResultBasket(): number;
 }
-export interface IproductCardBasket extends IproductCard{
-    number:number;
-}
-export interface IformDelivery{
-    adress:string;
-    methodPay:string;
-}
-export interface IcontactDetails{
-    email:string;
+export interface IValid{
     phone:string;
+    email:string;
+    address:string;
+    payment:string;
 }
-export interface IorderSuccessful{
+ 
+export interface ApiResponse {
+    items: ICards[];
+  }
+
+export interface IdoingBasket {
+    onClick: (event: MouseEvent) => void;
+}
+export interface ISuccessForm{
+    description: number;
+}
+export interface ISuccessDoing{
+    onClick: (event: MouseEvent) => void;
+}
+export interface ISuccessfulOrder{
     id:string;
-    result:number;
+    total:number;
 }
-export interface IformSuccessful{
-    result:number;
-}
-export interface IvalidOreder{
-    phone: string;
-	email: string;
-	adress: string;
-	methodPay: string;
-}
-export interface IorderInfo{
-    items:string[];
-    methodPay:string;
-    result:number;
-    adress:string;
-    phone:string;
-    email:string;
-}
-export interface IstatusApp{
-    catalog:IproductCard[];
-    basket:IproductCard[];
-    order:IorderInfo|null;
-    setCatalog(items: IproductCard[]): void;
-    addToBasket(product: IproductCard): void;
-    removeFromBasket(product:IproductCard):void;
-    getResultBasketPrice():number;
-}
-export interface IModal {
-	content: HTMLElement;
-}
-export type FormErrors = Partial<Record<keyof IorderInfo, string>>
