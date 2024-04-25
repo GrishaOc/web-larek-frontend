@@ -1,5 +1,5 @@
 import { ICards, IOrder, IStatusApi, IValid } from "../types";
-import { Model } from "./base/Model";
+import { Model } from "./base/model";
 
 export class Product extends Model<ICards> {
 	id: string;

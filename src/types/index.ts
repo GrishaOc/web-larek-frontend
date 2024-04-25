@@ -27,9 +27,6 @@ export interface IContacntForm{
     phone:string;
 }
 
-export interface IStatusApi{
-    items:ICards[]
-}
 export interface IPage{
     counter:number;
     catalog:HTMLElement[];

@@ -1,5 +1,5 @@
 import { ISuccessDoing, ISuccessForm } from "../types";
-import { Component } from "./base/Component";
+import { Component } from "./base/component";
 
 export class success extends Component<ISuccessForm>{
     protected _description:HTMLElement

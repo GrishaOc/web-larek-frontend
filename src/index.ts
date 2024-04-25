@@ -6,7 +6,7 @@ import { Product, StatusApp } from './components/StatusApp';
 import { EventEmitter } from './components/base/events';
 import { ICards, IContacntForm, IDeliveryForm, IValid } from './types';
 import { Page } from './components/Page';
-import { ViewCard } from './components/card/Card';
+import { ViewCard } from './components/Card';
 import { cloneTemplate, ensureElement } from './utils/utils';
 import { basketTemplate, cardBasketTemplate, cardCatalogTemplate, cardPreviewTemplate, contactsTemplate, successTemplate } from './components/templates';
 import { Modal } from './components/common/Modal';

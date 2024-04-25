@@ -1,5 +1,5 @@
 import { ICards, IdoingBasket } from "../types";
-import { Component } from "./base/Component";
+import { Component } from "./base/component";
 import { IEvents } from "./base/events";
 
 interface IBasket{
