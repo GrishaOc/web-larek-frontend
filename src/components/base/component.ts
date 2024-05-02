@@ -4,7 +4,9 @@ export abstract class Component<T> {
       element.classList.toggle(className, force);
     }
     protected setText(element: HTMLElement, value: string): void {
-      element.textContent = String(value);
+      if (element) {
+        element.textContent = String(value);
+      }
     }
     protected setImage(element: HTMLImageElement, src: string, alt?: string): void {
         element.src = src;

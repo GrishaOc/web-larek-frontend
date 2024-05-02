@@ -1,4 +1,4 @@
-import { ICards } from '../types';
+import { ICards } from '../types/index';
 import { ensureElement } from '../utils/utils';
 import { Component } from './base/component';
 
@@ -21,23 +21,23 @@ export class Card extends Component<ICards> {
 	};
 
 	constructor(
-		protected blockName: string,
+		protected divName: string,
 		container: HTMLElement,
 		actions?: ICardActions
 	) {
 		super(container);
 		this._image = ensureElement<HTMLImageElement>(
-			`.${blockName}__image`,
+			`.${divName}__image`,
 			container
 		);
-		this._title = ensureElement<HTMLElement>(`.${blockName}__title`, container);
+		this._title = ensureElement<HTMLElement>(`.${divName}__title`, container);
 		this._category = ensureElement<HTMLElement>(
-			`.${blockName}__category`,
+			`.${divName}__category`,
 			container
 		);
-		this._price = container.querySelector(`.${blockName}__price`);
-		this._description = container.querySelector(`.${blockName}__description`);
-		this._button = container.querySelector(`.${blockName}__button`);
+		this._price = container.querySelector(`.${divName}__price`);
+		this._description = container.querySelector(`.${divName}__description`);
+		this._button = container.querySelector(`.${divName}__button`);
 
 		if (actions?.onClick) {
 			if (this._button) {
@@ -103,7 +103,8 @@ export class ViewCard extends Card {
 	protected _description: HTMLElement;
 	constructor(container: HTMLElement, actions?: ICardActions) {
 		super('card', container, actions);
-		this._description = container.querySelector(`.${this.blockName}__text`);
+		this._button
+		this._description = container.querySelector(`.${this.divName}__text`);
 	}
 	set description(value: string) {
 		this.setText(this._description, value);

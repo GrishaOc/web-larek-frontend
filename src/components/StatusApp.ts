@@ -1,35 +1,31 @@
-import { ICards, IOrder, IStatusApi, IValid } from "../types";
+import { ICards, IOrder, IStatusApi } from "../types/index";
 import { Model } from "./base/model";
 
-export class Product extends Model<ICards> {
-	id: string;
-	description: string;
-	image: string;
-	title: string;
-	category: string;
-	status: boolean;
-	price: number | null;
-	selected: boolean;
-}
 type messageErore = Partial<Record<keyof IOrder, string>>;
+interface IValid{
+	phone:string;
+    email:string;
+	address:string;
+    payment:string;
+}
 
 export class StatusApp extends Model<IStatusApi> {
-	basket: Product[] = [];
-	catalog: Product[] = [];
+	catalog: ICards[];
+	basket: ICards[] = [];
 	order: IOrder = this.getEmptyOrder();
 	messageErore: messageErore = {};
 
-	setCatalog(items: ICards[],template: string) {
-		this.catalog = items.map((item) => new Product(item, this.evt));
-		this.emitChanges('catalog:changed', { catalog: this.catalog });
+	setCatalog(items: ICards[]) {
+		this.catalog = items;
+		this.emitChanges('items:changed');
 	}
 
-	addToBasket(product: Product) {
-		this.basket.push(product);
+	toBasket(item: ICards) {
+		this.basket.push(item);
 	}
 
-	removeFromBasket(product: Product) {
-		this.basket = this.basket.filter((item) => item.id !== product.id);
+	removeFromBasket(cards: ICards) {
+		this.basket = this.basket.filter((item) => item.id !== cards.id);
 	}
 
 	getTotalBasketPrice() {
@@ -79,7 +75,7 @@ export class StatusApp extends Model<IStatusApi> {
 
 		this.messageErore = errors;
 
-		this.evt.emit('orderFormErrors:change', this.messageErore);
+		this.evt.emit('orderErrors:change', this.messageErore);
 
 		return Object.keys(errors).length === 0;
 	}
@@ -95,13 +91,13 @@ export class StatusApp extends Model<IStatusApi> {
 		}
 
 		this.messageErore = errors;
-		this.evt.emit('contactsFormErrors:change', this.messageErore);
+		this.evt.emit('contactsErrors:change', this.messageErore);
 
 		return Object.keys(errors).length === 0;
 	}
 
 	selected(): void {
-		this.order.items = this.basket.map((product) => product.id);
+		this.order.items = this.basket.map((items) => items.id);
 	}
 
 	clearBasket(): void {
@@ -109,8 +105,8 @@ export class StatusApp extends Model<IStatusApi> {
 	}
 
 	resetSelected(): void {
-		this.catalog.forEach((product) => {
-			product.selected = false;
+		this.catalog.forEach((items) => {
+			items.selected = false;
 		});
 	}
 

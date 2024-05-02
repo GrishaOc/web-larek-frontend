@@ -1,4 +1,4 @@
-import { IContacntForm } from "../types";
+import { IContacntForm } from "../types/index";
 import { IEvents } from "./base/events";
 import { Form } from "./common/Form";
 

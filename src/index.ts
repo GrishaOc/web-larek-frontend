@@ -1,37 +1,35 @@
 import './scss/styles.scss';
-import { Api, ApiListResponse } from './components/base/api';
-import { API_URL, CDN_URL, settings } from './utils/constants';
-import { WebLarekApi } from './components/WebLarekAPI';
-import { Product, StatusApp } from './components/StatusApp';
+import { ApiListResponse } from './components/base/api';
+import { API_URL, CDN_URL} from './utils/constants';
+import { StatusApp } from './components/StatusApp';
 import { EventEmitter } from './components/base/events';
-import { ICards, IContacntForm, IDeliveryForm, IValid } from './types';
+import { ICards, IDeliveryForm, IValidContact,IValidDelivery } from './types/index';
 import { Page } from './components/Page';
 import { ViewCard } from './components/Card';
 import { cloneTemplate, ensureElement } from './utils/utils';
-import { basketTemplate, cardBasketTemplate, cardCatalogTemplate, cardPreviewTemplate, contactsTemplate, successTemplate } from './components/templates';
+import { basketTemplate, cardBasketTemplate, cardCatalogTemplate, cardPreviewTemplate, contactsTemplate, orderTemplate, successTemplate } from './components/templates';
 import { Modal } from './components/common/Modal';
 import { Basket, ProductInBasket } from './components/Basket';
 import { DeliveryForm } from './components/DeliveryForm';
 import { ContactsForm } from './components/ContactsForm';
 import { success } from './components/success';
+import {WebLarekApi} from './components/LarekApi'
 
 const evt = new EventEmitter();
-const api = new WebLarekApi(API_URL, CDN_URL);
+const api = new WebLarekApi(CDN_URL,API_URL);
 const statusData = new StatusApp({}, evt);
 const page = new Page(document.body, evt);
 const modal = new Modal(ensureElement<HTMLElement>('#modal-container'), evt);
-const basket = new Basket(cloneTemplate(basketTemplate),evt,'basket');
-const order = new DeliveryForm(cloneTemplate(successTemplate),'order',evt)
-const orderForm = new DeliveryForm(cloneTemplate(basketTemplate),'order',evt)
+const basket = new Basket('basket',cloneTemplate(basketTemplate),evt);
+const deliveryForm = new DeliveryForm('order',cloneTemplate(orderTemplate),evt)
 const contacts = new ContactsForm(cloneTemplate(contactsTemplate),evt)
 const Success = new success(cloneTemplate(successTemplate),'order-success')
 //карточки
 api
-	.getCards()
+  .getCards()
 	.then(statusData.setCatalog.bind(statusData))
-	.catch((err) => {
-		``;
-		console.error(err);
+	.catch((error) => {
+		console.log(error);
 	});
 evt.on('items:changed', () => {
 	page.Catalog = statusData.catalog.map((item) => {
@@ -46,13 +44,10 @@ evt.on('items:changed', () => {
 		});
 	});
 });
-evt.on('card:select',(item:Product)=>{
+evt.on('card:select',(item:ICards)=>{
   page.LockScroll = true;
   const product = new ViewCard(cloneTemplate(cardPreviewTemplate),  {
-    onClick: () =>{
-      evt.emit('cards:toBasket',item)
-    },
-  });
+    onClick: () => evt.emit('card:toBasket',item),});
   modal.render({
     content:product.render({
       id:item.id,
@@ -65,14 +60,17 @@ evt.on('card:select',(item:Product)=>{
     })
   })
 })
+evt.on('modal:remove', () => {
+	page.LockScroll = false;
+})
 //корзина
-evt.on('card:toBasket', (item: Product) => {
+evt.on('card:toBasket', (item: ICards) => {
 	item.selected = true;
-	statusData.addToBasket(item);
+	statusData.toBasket(item);
 	page.Counter = statusData.getCountProductInBasket();
 	modal.remove();
 });
-evt.on('basket:remove', (item: Product) => {
+evt.on('basket:remove', (item: ICards) => {
 item.selected = false;
 statusData.removeFromBasket(item);
 basket.total = statusData.getTotalBasketPrice();
@@ -84,10 +82,10 @@ if (!statusData.basket.length) {
 evt.on('basket:open',()=>{
   page.LockScroll = true
   const itemBasket = statusData.basket.map((item,index)=>{
-    const ProductBasket = new ProductInBasket('card',cloneTemplate(cardBasketTemplate),{
+    const card = new ProductInBasket('card',cloneTemplate(cardBasketTemplate),{
       onClick:()=> evt.emit('basket:remove',item)
     })
-    return ProductBasket.render({
+    return card.render({
       title:item.title,
       price:item.price,
       index:index + 1,
@@ -103,7 +101,7 @@ evt.on('basket:open',()=>{
 //закза
 evt.on('basket:order',()=>{
   modal.render({
-    content: order.render({
+    content: deliveryForm.render({
       address:'',
       payment:'',
       valid:false,
@@ -131,23 +129,22 @@ evt.on('contacts:submit',()=>{
     statusData.clearBasket();
     page.Counter = 0;
     statusData.resetSelected()
-    order.clear()
   })
   .catch((err) => {
     console.log(err);
   });
 })
 //изменение
-evt.on('orderErrors:change',(errors:Partial<IValid>)=>{
+evt.on('orderErrors:change',(errors:Partial<IValidDelivery>)=>{
   const {payment,address} = errors
-  order.valid = !payment && !address
-  order.errors = Object.values({payment,address}).filter(i => !!i).join(";")
+  deliveryForm.valid = !payment && !address
+  deliveryForm.errors = Object.values({payment,address}).filter((i) => !!i).join(";")
 }
 )
-evt.on('contactsErrors:change',(errors:Partial<IValid>)=>{
+evt.on('contactsErrors:change',(errors:Partial<IValidContact>)=>{
   const {email,phone} = errors
-  order.valid = !email && !phone
-  order.errors = Object.values({email,phone}).filter(i => !!i).join(";")
+  contacts.valid = !email && !phone
+  contacts.errors = Object.values({email,phone}).filter((i) => !!i).join(";")
 })
 evt.on('orderInput:change',(data:{fied:keyof IDeliveryForm; value:string})=>{
   statusData.setOrderFields(data.fied,data.value)
@@ -161,7 +158,4 @@ evt.on('order:success',(res:ApiListResponse<string>)=>{
     })
   })
 })
-//закрытие
-evt.on('modal:close', () => {
-	page.LockScroll = false;
-})
+

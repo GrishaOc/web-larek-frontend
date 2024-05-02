@@ -41,11 +41,13 @@ export interface IStatusApi{
 	removeBasket(product: ICards): void;
 	getResultBasket(): number;
 }
-export interface IValid{
-    phone:string;
-    email:string;
+export interface IValidDelivery{
     address:string;
     payment:string;
+}
+export interface IValidContact{
+    phone:string;
+    email:string;
 }
  
 export interface ApiResponse {

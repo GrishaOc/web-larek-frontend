@@ -1,4 +1,4 @@
-import { IPage } from "../types";
+import { IPage } from "../types/index";
 import { ensureElement } from "../utils/utils";
 import { Component } from "./base/component";
 import { IEvents } from "./base/events";
@@ -13,6 +13,7 @@ export class Page extends Component<IPage>{
     constructor(container:HTMLElement,protected evt:IEvents){
         super(container)
         this._counter = ensureElement<HTMLElement>('.header__basket-counter')
+        this._scroll = ensureElement<HTMLElement>('.page__wrapper')
         this._catalog = ensureElement<HTMLElement>('.gallery')
         this._basket = ensureElement<HTMLButtonElement>('.header__basket')
         this._basket.addEventListener('click',()=>{
@@ -29,9 +30,9 @@ export class Page extends Component<IPage>{
     }
     set LockScroll(value:boolean){
         if (value) {
-            this._scroll.classList.add('page_wrapper_locked')
+            this._scroll.classList.add('page__wrapper_locked')
         }else{
-            this._scroll.classList.remove('page_wrapper_locked')
+            this._scroll.classList.remove('page__wrapper_locked')
         }
     }
 }

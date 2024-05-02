@@ -1,18 +1,18 @@
-import { IDeliveryForm } from "../types";
+import { IDeliveryForm } from "../types/index";
 import { IEvents } from "./base/events";
 import { Form } from "./common/Form";
 
 export class DeliveryForm extends Form<IDeliveryForm>{
     protected _card: HTMLButtonElement;
 	protected _cash: HTMLButtonElement;
-	protected _address: HTMLInputElement;
+    protected _address:HTMLInputElement;
 
-    constructor(container:HTMLFormElement,protected divName:string,protected evt:IEvents){
+    constructor(protected divName:string,container:HTMLFormElement,protected evt:IEvents){
         super(container,evt)
 
         this._card = container.elements.namedItem('card') as HTMLButtonElement;
         this._cash = container.elements.namedItem('cash') as HTMLButtonElement;
-        this._address = container.elements.namedItem('address') as HTMLInputElement;
+        this._address = container.elements.namedItem('address') as HTMLInputElement
 
         if(this._cash){
             this._cash.addEventListener('click',()=>{
@@ -33,6 +33,6 @@ export class DeliveryForm extends Form<IDeliveryForm>{
     clear(){
         this._cash.classList.remove('button_alt-active');
         this._card.classList.remove('button_alt-active');
-		this._address.value = '';
+        this._address.value = '';
     }
 }

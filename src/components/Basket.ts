@@ -1,17 +1,17 @@
-import { ICards, IdoingBasket } from "../types";
+import { ICards, IdoingBasket } from "../types/index";
 import { Component } from "./base/component";
 import { IEvents } from "./base/events";
 
 interface IBasket{
     list:HTMLElement[];
-    total:number|null;
+    total:number;
 }
 export class Basket extends Component<IBasket>{
     protected _list:HTMLElement;
     protected _price: HTMLElement;
     protected _button:HTMLButtonElement;
 
-    constructor(container:HTMLElement,protected evt: IEvents,divName:string){
+    constructor(divName:string,container:HTMLElement,protected evt: IEvents){
         super(container)
 
         this._list = container.querySelector(`.${divName}__list`)
@@ -22,7 +22,7 @@ export class Basket extends Component<IBasket>{
             this._button.addEventListener('click',()=>this.evt.emit('basket:order'))
         }
     }
-    set total(price:number|null){
+    set total(price:number){
         this.setText(this._button,price + 'Синапсов')
     }
 
@@ -47,10 +47,10 @@ export class ProductInBasket extends Component<IproductInbasket>{
     constructor(protected divName:string,container:HTMLElement,doing?:IdoingBasket){
         super(container)
 
-        this._title = container.querySelector(`${divName}__title`);
-        this._index = container.querySelector('.basket__item-index__index')
-        this._price = container.querySelector(`${divName}__price`)
-        this._button = container.querySelector(`${divName}__button`)
+        this._title = container.querySelector(`.${divName}__title`);
+        this._index = container.querySelector('.basket__item-index')
+        this._price = container.querySelector(`.${divName}__price`)
+        this._button = container.querySelector(`.${divName}__button`)
 
         if(this._button){
             this._button.addEventListener('click',(evt)=>{

@@ -3,13 +3,13 @@ import { Component } from "../base/component";
 import { IEvents } from "../base/events";
 
 interface IForm{
-    errors:string[];
     valid:boolean
+    errors:string[];
 }
 
 export class Form<T> extends Component<IForm>{
     protected _errors:HTMLElement;
-    protected _sumbit:HTMLButtonElement;
+    protected _submit:HTMLButtonElement;
 
     constructor(protected container:HTMLFormElement,protected evt:IEvents){
         super(container)
@@ -24,20 +24,21 @@ export class Form<T> extends Component<IForm>{
 			e.preventDefault();
 			this.evt.emit(`${this.container.name}:submit`);
         })
-        this._sumbit = ensureElement<HTMLButtonElement>('button[type:sumbit]',this.container)
-        this._errors = ensureElement<HTMLElement>('.form__erors',this.container)
+        this._submit = ensureElement<HTMLButtonElement>('button[type=submit]',this.container)
+        this._errors = ensureElement<HTMLElement>('.form__errors',this.container)
     }
     protected inputChange(cell:keyof T,value:string){
         this.evt.emit(`${this.container.name}.${String(cell)}:change`,{
             cell,value,
         })
     }
+    set valid(value:boolean){
+        this._submit.disabled= !value
+    }
     set errors(value:string){
         this.setText(this._errors,value)
     }
-    set valid(value:boolean){
-        this._sumbit.disabled= !value
-    }
+
     render(state:Partial<T>&IForm){
         const{valid,errors,...inputs} = state
         super.render({valid,errors})

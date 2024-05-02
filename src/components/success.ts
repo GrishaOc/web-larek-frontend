@@ -1,4 +1,4 @@
-import { ISuccessDoing, ISuccessForm } from "../types";
+import { ISuccessDoing, ISuccessForm } from "../types/index";
 import { Component } from "./base/component";
 
 export class success extends Component<ISuccessForm>{
