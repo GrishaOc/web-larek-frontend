@@ -1,22 +1,26 @@
 import { ISuccessDoing, ISuccessForm } from "../types/index";
+import { ensureElement } from "../utils/utils";
 import { Component } from "./base/component";
 
-export class success extends Component<ISuccessForm>{
-    protected _description:HTMLElement
-    protected _button:HTMLButtonElement
+export class Success extends Component<ISuccessForm> {
+	protected _button: HTMLButtonElement;
+	protected _description: HTMLElement;
 
-    constructor(container:HTMLElement,divName:string,doing?:ISuccessDoing){
-        super(container)
-        this._description = container.querySelector(`${divName}__description`)
-        this._button = container.querySelector(`${divName}__button`)
+	constructor(
+		protected blockName: string,container: HTMLElement,doing?: ISuccessDoing) {
+		super(container);
 
-        if (doing?.onClick){
-            if (this._button) {
-                this._button.addEventListener('click',doing.onClick)
-            }
-        }
-    }
-    set description(value:number){
-        this.setText(this._description, "Списано" + value + "Синапсов")
-    }
+		this._button = ensureElement<HTMLButtonElement>(`.${blockName}__close`,container);
+		this._description = ensureElement<HTMLElement>(`.${blockName}__description`,container);
+
+		if (doing?.onClick) {
+			if (this._button) {
+				this._button.addEventListener('click', doing.onClick);
+			}
+		}
+	}
+
+	set description(value: number) {
+		this.setText(this._description, 'Списано ' + value + ' синапсов');
+	}
 }

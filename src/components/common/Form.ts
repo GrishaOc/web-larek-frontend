@@ -28,7 +28,7 @@ export class Form<T> extends Component<IForm>{
         this._errors = ensureElement<HTMLElement>('.form__errors',this.container)
     }
     protected inputChange(cell:keyof T,value:string){
-        this.evt.emit(`${this.container.name}.${String(cell)}:change`,{
+        this.evt.emit('orderInput:change',{
             cell,value,
         })
     }

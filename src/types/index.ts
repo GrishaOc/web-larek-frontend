@@ -49,7 +49,12 @@ export interface IValidContact{
     phone:string;
     email:string;
 }
- 
+export interface IValid{
+    address:string;
+    payment:string;
+    phone:string;
+    email:string
+}
 export interface ApiResponse {
     items: ICards[];
   }

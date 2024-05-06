@@ -23,7 +23,7 @@ export class Basket extends Component<IBasket>{
         }
     }
     set total(price:number){
-        this.setText(this._button,price + 'Синапсов')
+        this.setText(this._price, price + 'Синапсов')
     }
 
     set list(items:HTMLElement[]){

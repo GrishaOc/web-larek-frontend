@@ -11,6 +11,10 @@ export class ContactsForm extends Form<IContacntForm>{
     }
     set phone(value:string){
         (this.container.elements.namedItem('phone') as HTMLInputElement).value = value
-}
 
+}
+clear(){
+    this.email = ''
+    this.phone = ''
+}
 }

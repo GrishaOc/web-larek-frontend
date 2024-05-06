@@ -3,7 +3,7 @@ import { ApiListResponse } from './components/base/api';
 import { API_URL, CDN_URL} from './utils/constants';
 import { StatusApp } from './components/StatusApp';
 import { EventEmitter } from './components/base/events';
-import { ICards, IDeliveryForm, IValidContact,IValidDelivery } from './types/index';
+import { ICards, IContacntForm, IDeliveryForm, IValidContact,IValidDelivery } from './types/index';
 import { Page } from './components/Page';
 import { ViewCard } from './components/Card';
 import { cloneTemplate, ensureElement } from './utils/utils';
@@ -12,7 +12,7 @@ import { Modal } from './components/common/Modal';
 import { Basket, ProductInBasket } from './components/Basket';
 import { DeliveryForm } from './components/DeliveryForm';
 import { ContactsForm } from './components/ContactsForm';
-import { success } from './components/success';
+import { Success } from './components/success';
 import {WebLarekApi} from './components/LarekApi'
 
 const evt = new EventEmitter();
@@ -23,7 +23,7 @@ const modal = new Modal(ensureElement<HTMLElement>('#modal-container'), evt);
 const basket = new Basket('basket',cloneTemplate(basketTemplate),evt);
 const deliveryForm = new DeliveryForm('order',cloneTemplate(orderTemplate),evt)
 const contacts = new ContactsForm(cloneTemplate(contactsTemplate),evt)
-const Success = new success(cloneTemplate(successTemplate),'order-success')
+const success = new Success('order-success',cloneTemplate(successTemplate),{onClick:()=> modal.remove()})
 //карточки
 api
   .getCards()
@@ -47,7 +47,15 @@ evt.on('items:changed', () => {
 evt.on('card:select',(item:ICards)=>{
   page.LockScroll = true;
   const product = new ViewCard(cloneTemplate(cardPreviewTemplate),  {
-    onClick: () => evt.emit('card:toBasket',item),});
+    onClick: () => {
+      if (item.selected) {
+        evt.emit('basket:remove',item);
+      } else {
+        evt.emit('card:toBasket', item);
+      }
+      product.updateButton(item.selected)
+    }
+  });
   modal.render({
     content:product.render({
       id:item.id,
@@ -78,6 +86,7 @@ page.Counter = statusData.getCountProductInBasket();
 if (!statusData.basket.length) {
   basket.disableBTN();
 }
+modal.remove();
 });
 evt.on('basket:open',()=>{
   page.LockScroll = true
@@ -86,8 +95,8 @@ evt.on('basket:open',()=>{
       onClick:()=> evt.emit('basket:remove',item)
     })
     return card.render({
-      title:item.title,
       price:item.price,
+      title:item.title,
       index:index + 1,
     })
   })
@@ -111,6 +120,7 @@ evt.on('basket:order',()=>{
 })
 evt.on('order:submit',()=>{
   statusData.order.total =statusData.getTotalBasketPrice()
+  statusData.Selected();
   modal.render({
     content:contacts.render({
       email:"",
@@ -129,6 +139,8 @@ evt.on('contacts:submit',()=>{
     statusData.clearBasket();
     page.Counter = 0;
     statusData.resetSelected()
+    deliveryForm.clear();
+    contacts.clear();
   })
   .catch((err) => {
     console.log(err);
@@ -146,14 +158,14 @@ evt.on('contactsErrors:change',(errors:Partial<IValidContact>)=>{
   contacts.valid = !email && !phone
   contacts.errors = Object.values({email,phone}).filter((i) => !!i).join(";")
 })
-evt.on('orderInput:change',(data:{fied:keyof IDeliveryForm; value:string})=>{
-  statusData.setOrderFields(data.fied,data.value)
+evt.on('orderInput:change',(data:{cell:keyof IDeliveryForm; value:string})=>{
+  statusData.setOrderFields(data.cell,data.value)
 }
 )
 //успешная покупка
 evt.on('order:success',(res:ApiListResponse<string>)=>{
   modal.render({
-    content:Success.render({
+    content:success.render({
       description:res.total
     })
   })

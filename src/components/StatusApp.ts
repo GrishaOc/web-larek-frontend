@@ -96,7 +96,7 @@ export class StatusApp extends Model<IStatusApi> {
 		return Object.keys(errors).length === 0;
 	}
 
-	selected(): void {
+	Selected(): void {
 		this.order.items = this.basket.map((items) => items.id);
 	}
 

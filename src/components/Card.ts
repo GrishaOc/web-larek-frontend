@@ -78,7 +78,6 @@ export class Card extends Component<ICards> {
 	set description(value: string) {
 		this.setText(this._description, value);
 	}
-
 	set button(value: string) {
 		if (this._price.textContent === 'Бесценно') {
 			this._button.disabled = true;
@@ -91,10 +90,10 @@ export class Card extends Component<ICards> {
 	}
 
 	updateButton(selected: boolean) {
-		if (selected) {
-			this.button = 'убрать из корзины';
-		} else {
+		if (!selected) {
 			this.button = 'В корзину';
+		} else {
+			this.button = 'убрать из корзины';
 		}
 	}
 }
