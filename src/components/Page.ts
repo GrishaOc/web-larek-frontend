@@ -16,7 +16,7 @@ export class Page extends Component<IPage>{
         this._scroll = ensureElement<HTMLElement>('.page__wrapper')
         this._catalog = ensureElement<HTMLElement>('.gallery')
         this._basket = ensureElement<HTMLButtonElement>('.header__basket')
-        this._basket.addEventListener('click',()=>{
+        this._basket.addEventListener('mousedown',()=>{
             this.evt.emit('basket:open')
         })
     }

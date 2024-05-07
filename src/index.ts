@@ -5,7 +5,7 @@ import { StatusApp } from './components/StatusApp';
 import { EventEmitter } from './components/base/events';
 import { ICards, IContacntForm, IDeliveryForm, IValidContact,IValidDelivery } from './types/index';
 import { Page } from './components/Page';
-import { ViewCard } from './components/Card';
+import { Card, ViewCard } from './components/Card';
 import { cloneTemplate, ensureElement } from './utils/utils';
 import { basketTemplate, cardBasketTemplate, cardCatalogTemplate, cardPreviewTemplate, contactsTemplate, orderTemplate, successTemplate } from './components/templates';
 import { Modal } from './components/common/Modal';
@@ -33,7 +33,7 @@ api
 	});
 evt.on('items:changed', () => {
 	page.Catalog = statusData.catalog.map((item) => {
-		const card = new ViewCard(cloneTemplate(cardCatalogTemplate), {
+		const card = new Card('card',cloneTemplate(cardCatalogTemplate), {
 			onClick: () => evt.emit('card:select', item),
 		});
 		return card.render({
@@ -70,6 +70,8 @@ evt.on('card:select',(item:ICards)=>{
 })
 evt.on('modal:remove', () => {
 	page.LockScroll = false;
+  contacts.clear()
+  deliveryForm.clear();
 })
 //корзина
 evt.on('card:toBasket', (item: ICards) => {
@@ -86,7 +88,6 @@ page.Counter = statusData.getCountProductInBasket();
 if (!statusData.basket.length) {
   basket.disableBTN();
 }
-modal.remove();
 });
 evt.on('basket:open',()=>{
   page.LockScroll = true

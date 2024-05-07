@@ -15,7 +15,7 @@ export class DeliveryForm extends Form<IDeliveryForm>{
         this._address = container.elements.namedItem('address') as HTMLInputElement
 
         if(this._cash){
-            this._cash.addEventListener('click',()=>{
+            this._cash.addEventListener('mousedown',()=>{
                 this._cash.classList.add('button_alt-active')
                 this._card.classList.remove('button_alt-active')
                 this.inputChange('payment','cash')
@@ -23,7 +23,7 @@ export class DeliveryForm extends Form<IDeliveryForm>{
         }
 
         if(this._card){
-            this._card.addEventListener('click',()=>{
+            this._card.addEventListener('mousedown',()=>{
                 this._card.classList.add('button_alt-active')
                 this._cash.classList.remove('button_alt-active')
                 this.inputChange('payment','card')

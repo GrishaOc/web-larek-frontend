@@ -19,7 +19,7 @@ export class Basket extends Component<IBasket>{
         this._button = container.querySelector((`.${divName}__button`))
 
         if (this._button) {
-            this._button.addEventListener('click',()=>this.evt.emit('basket:order'))
+            this._button.addEventListener('mousedown',()=>this.evt.emit('basket:order'))
         }
     }
     set total(price:number){
@@ -53,7 +53,7 @@ export class ProductInBasket extends Component<IproductInbasket>{
         this._button = container.querySelector(`.${divName}__button`)
 
         if(this._button){
-            this._button.addEventListener('click',(evt)=>{
+            this._button.addEventListener('mousedown',(evt)=>{
                 this.container.remove()
                 doing?.onClick(evt)
             })

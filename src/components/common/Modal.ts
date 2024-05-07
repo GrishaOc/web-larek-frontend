@@ -17,9 +17,9 @@ export class Modal extends Component<IModal>{
 
         this._closeButton = ensureElement<HTMLButtonElement>('.modal__close',container)
         this._content = ensureElement<HTMLElement>('.modal__content',container)
-        this._closeButton.addEventListener('click',this.remove.bind(this))
-        this._content.addEventListener('click',(evt)=>evt.stopPropagation())
-        this.container.addEventListener('click',this.remove.bind(this))
+        this._closeButton.addEventListener('mousedown',this.remove.bind(this))
+        this._content.addEventListener('mousedown',(evt)=>evt.stopPropagation())
+        this.container.addEventListener('mousedown',this.remove.bind(this))
     }
     set content(value:HTMLElement){
         this._content.replaceChildren(value)

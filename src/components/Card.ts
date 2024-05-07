@@ -41,9 +41,9 @@ export class Card extends Component<ICards> {
 
 		if (actions?.onClick) {
 			if (this._button) {
-				this._button.addEventListener('click', actions.onClick);
+				this._button.addEventListener('mousedown', actions.onClick);
 			} else {
-				container.addEventListener('click', actions.onClick);
+				container.addEventListener('mousedown', actions.onClick);
 			}
 		}
 	}
@@ -69,6 +69,10 @@ export class Card extends Component<ICards> {
 			this._price,
 			value ? `${value.toString()} синапсов` : 'Бесценно'
 		);
+		if (value === null && this._button) {
+			this._button.disabled = true;
+			this.setText(this._button, 'Нельзя купить');
+		}
 	}
 
 	get price(): number {
@@ -79,10 +83,7 @@ export class Card extends Component<ICards> {
 		this.setText(this._description, value);
 	}
 	set button(value: string) {
-		if (this._price.textContent === 'Бесценно') {
-			this._button.disabled = true;
-			this.setText(this._button, 'Нельзя купить');
-		} else this.setText(this._button, value);
+		this.setText(this._button, value);
 	}
 
 	set selected(value: boolean) {

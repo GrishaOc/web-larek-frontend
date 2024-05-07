@@ -15,7 +15,7 @@ export class Success extends Component<ISuccessForm> {
 
 		if (doing?.onClick) {
 			if (this._button) {
-				this._button.addEventListener('click', doing.onClick);
+				this._button.addEventListener('mousedown', doing.onClick);
 			}
 		}
 	}
